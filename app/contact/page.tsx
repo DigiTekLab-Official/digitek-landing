@@ -33,7 +33,7 @@ export default function Contact() {
               <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center border border-slate-800">
                 <MapPin className="w-5 h-5" />
               </div>
-              <span className="text-lg">Cuddalore, India & Dubai, UAE</span>
+              <span className="text-lg">Chennai, India & Dubai, UAE</span>
             </div>
           </div>
         </div>
