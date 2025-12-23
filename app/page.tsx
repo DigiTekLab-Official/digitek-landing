@@ -57,7 +57,7 @@ export default function Home() {
             className="group relative flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-blue-500/25"
           >
             <Mail className="w-6 h-6" />
-            <span>ameer@digiteklab.com</span>
+            <span>info@digiteklab.com</span>
           </Link>
           
           {/* Phone Button (Now Clickable!) */}
@@ -66,7 +66,7 @@ export default function Home() {
             className="group flex items-center gap-3 px-8 py-4 bg-slate-800/80 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700 hover:border-slate-500 rounded-full font-medium text-lg transition-all cursor-pointer"
           >
             <Phone className="w-6 h-6 text-slate-400 group-hover:text-emerald-400 transition-colors" />
-            <span>+91-770-8276542</span>
+            <span>+91-638-3255181</span>
           </a>
 
         </div>

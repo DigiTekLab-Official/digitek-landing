@@ -19,14 +19,14 @@ export default function Contact() {
               <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center border border-slate-800">
                 <Mail className="w-5 h-5" />
               </div>
-              <span className="text-lg">ameer@digiteklab.com</span>
+              <span className="text-lg">info@digiteklab.com</span>
             </Link>
 
             <Link href="tel:+917708276542" className="flex items-center gap-4 text-slate-300 hover:text-emerald-400 transition-colors">
               <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center border border-slate-800">
                 <Phone className="w-5 h-5" />
               </div>
-              <span className="text-lg">+91-770-8276542</span>
+              <span className="text-lg">+91-638-3255181</span>
             </Link>
 
             <div className="flex items-center gap-4 text-slate-300">
