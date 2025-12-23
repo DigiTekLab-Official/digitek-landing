@@ -17,11 +17,11 @@ export default function About() {
           </p>
         </div>
 
-        {/* The "Authority" Section (Track Record) */}
+        {/* The "Authority" Section (Track Record) - ANONYMIZED */}
         <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl space-y-6">
           <h2 className="text-2xl font-semibold text-white">Our Track Record</h2>
           <p className="text-slate-300 leading-relaxed text-lg">
-            Founded by <strong>Ameer Muneer</strong>, a veteran Aviation Procurement Specialist, our firm leverages 15+ years of experience managing <strong>AED 6 Billion+</strong> in infrastructure projects across the UAE and India.
+            Led by <strong>veteran Aviation Procurement Specialists</strong>, our firm leverages over 15 years of experience managing <strong>AED 6 Billion+</strong> in infrastructure projects across the UAE and India.
           </p>
         </div>
 
