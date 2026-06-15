@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.jsx';
+
+// ⚠️ EDIT THESE — placeholders. Set your correct details once.
+const EMAIL = 'info@digiteklab.com';
+const PHONE_DISPLAY = '+91 77082 76542';
+const PHONE_RAW = '+917708276542';
+const WHATSAPP = '917708276542'; // country code + number, no + or spaces
+const LOCATION = 'Tamil Nadu, India';
+
+const cards = [
+  { tint: 'blue', label: 'Email', value: EMAIL, href: `mailto:${EMAIL}`, icon: '✉' },
+  { tint: 'green', label: 'WhatsApp', value: PHONE_DISPLAY, href: `https://wa.me/${WHATSAPP}`, icon: '◷' },
+  { tint: 'red', label: 'Phone', value: PHONE_DISPLAY, href: `tel:${PHONE_RAW}`, icon: '☎' },
+  { tint: 'purple', label: 'Location', value: LOCATION, href: null, icon: '◉' },
+];
+
+const tintMap = {
+  blue: 'bg-tint-blue text-node-blue',
+  green: 'bg-tint-green text-node-green',
+  red: 'bg-tint-red text-node-red',
+  purple: 'bg-tint-purple text-node-purple',
+};
+---
+
+<Base title="Contact — Digitek Lab" description="Tell Digitek Lab what you're trying to build. Web, mobile, and custom software for businesses.">
+  <main class="mx-auto max-w-5xl px-5 sm:px-8">
+    <section class="py-16 sm:py-20">
+      <p class="mb-4 font-mono text-xs uppercase tracking-widest text-faint">Contact</p>
+      <h1 class="text-4xl font-800 leading-tight tracking-tight sm:text-5xl">
+        Let's talk about<br />what you're building.
+      </h1>
+      <p class="mt-5 max-w-lg text-lg text-muted">
+        Share a few details and we'll come back with a clear, honest take on the
+        fastest way to get it built.
+      </p>
+    </section>
+
+    <section class="grid gap-10 pb-20 lg:grid-cols-[1.3fr_1fr]">
+      <ContactForm client:load />
+
+      <div class="flex flex-col gap-3">
+        {cards.map((c) => {
+          const inner = (
+            <div class="flex items-center gap-4">
+              <span class={`flex h-11 w-11 items-center justify-center rounded-lg ${tintMap[c.tint]}`}>{c.icon}</span>
+              <div>
+                <p class="font-mono text-[11px] uppercase tracking-wider text-faint">{c.label}</p>
+                <p class="text-sm font-600 text-ink">{c.value}</p>
+              </div>
+            </div>
+          );
+          return c.href ? (
+            <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener" class="rounded-xl border border-line bg-panel p-5 shadow-card transition-shadow hover:shadow-card-hover">{inner}</a>
+          ) : (
+            <div class="rounded-xl border border-line bg-panel p-5 shadow-card">{inner}</div>
+          );
+        })}
+
+        <div class="mt-2 rounded-xl border border-line bg-panel p-5 shadow-card">
+          <p class="mb-3 font-mono text-[11px] uppercase tracking-wider text-faint">Office hours</p>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-muted">Mon – Fri</span><span class="text-ink">9:00 AM – 6:00 PM</span></div>
+            <div class="flex justify-between"><span class="text-muted">Saturday</span><span class="text-ink">10:00 AM – 2:00 PM</span></div>
+            <div class="flex justify-between"><span class="text-muted">Sunday</span><span class="text-node-red">Closed</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

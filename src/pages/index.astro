@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects, services } from '../data/projects.js';
+
+const featured = projects.filter((p) => p.featured);
+const serviceTint = {
+  blue: 'bg-tint-blue text-node-blue',
+  red: 'bg-tint-red text-node-red',
+  green: 'bg-tint-green text-node-green',
+  purple: 'bg-tint-purple text-node-purple',
+};
+---
+
+<Base>
+  <main>
+    <!-- HERO -->
+    <section class="relative overflow-hidden border-b border-line bg-surface">
+      <div class="pointer-events-none absolute inset-0 opacity-60"
+           style="background-image: radial-gradient(circle at 1px 1px, #dfe2ea 1px, transparent 0); background-size: 28px 28px;"></div>
+      <div class="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
+        <p class="rise rise-1 mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-xs font-500 text-muted shadow-soft">
+          <span class="h-1.5 w-1.5 rounded-full bg-node-green"></span>
+          Software studio · India
+        </p>
+        <h1 class="rise rise-2 max-w-3xl text-4xl font-800 leading-[1.05] tracking-tight sm:text-6xl">
+          Web, mobile &amp; custom software,
+          <span class="text-node-blue">built to ship.</span>
+        </h1>
+        <p class="rise rise-3 mt-6 max-w-xl text-lg text-muted">
+          We design, build, and run real digital products — from online storefronts
+          and billing-system integrations to mobile apps and automation. Engineered
+          to launch, not to sit in a portfolio.
+        </p>
+        <div class="rise rise-4 mt-8 flex flex-wrap gap-3">
+          <a href="/contact" class="rounded-lg bg-node-blue px-5 py-3 text-sm font-600 text-white shadow-soft transition-colors hover:bg-node-blue/90">
+            Start a project
+          </a>
+          <a href="/portfolio" class="rounded-lg border border-line bg-white px-5 py-3 text-sm font-600 text-ink shadow-soft transition-colors hover:border-faint">
+            View our work
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-6xl px-5 sm:px-8">
+      <!-- SERVICES -->
+      <section class="py-16">
+        <h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">What we build</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((s) => (
+            <div class="rounded-xl border border-line bg-panel p-6 shadow-card transition-shadow hover:shadow-card-hover">
+              <div class={`mb-4 flex h-10 w-10 items-center justify-center rounded-lg ${serviceTint[s.color]} text-lg font-700`}>+</div>
+              <h3 class="font-700">{s.title}</h3>
+              <p class="mt-2 text-sm text-muted">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- PRODUCTS WE'VE BUILT -->
+      <section class="border-t border-line py-16">
+        <div class="mb-2 flex items-baseline justify-between">
+          <h2 class="text-2xl font-800 tracking-tight">Products we've built</h2>
+          <a href="/portfolio" class="text-sm font-600 text-node-blue hover:underline">All work →</a>
+        </div>
+        <p class="mb-8 max-w-xl text-sm text-muted">
+          A selection of live products we've designed, built, and operate ourselves —
+          not client brochures. The strongest proof a studio can show is its own shipped work.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((p) => <ProjectCard project={p} />)}
+        </div>
+      </section>
+
+      <!-- WHY -->
+      <section class="border-t border-line py-16">
+        <div class="grid gap-10 lg:grid-cols-[1fr_1.5fr]">
+          <h2 class="text-2xl font-800 leading-tight tracking-tight">
+            Why teams<br />work with us
+          </h2>
+          <div class="grid gap-x-10 gap-y-7 sm:grid-cols-2">
+            <div>
+              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-blue"></span>We run our own products</h3>
+              <p class="mt-2 text-sm text-muted">We don't just build and hand off — we operate live platforms with real users and payments, so we know what it takes to keep something running.</p>
+            </div>
+            <div>
+              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-green"></span>Retail &amp; POS fluency</h3>
+              <p class="mt-2 text-sm text-muted">Billing systems, barcodes, inventory, and the physical store side — we understand the operations, not just the website.</p>
+            </div>
+            <div>
+              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-red"></span>Enterprise discipline</h3>
+              <p class="mt-2 text-sm text-muted">Years inside large organizations means we bring structure, documentation, and process — not just code that works once.</p>
+            </div>
+            <div>
+              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-purple"></span>Fast, modern stack</h3>
+              <p class="mt-2 text-sm text-muted">Static-first builds on a modern toolchain — fast to load, easy to scale, and deployed on global infrastructure.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- CTA -->
+    <section class="border-t border-line bg-surface">
+      <div class="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+        <div class="rounded-2xl border border-line bg-ink p-10 text-center sm:p-14">
+          <h2 class="text-2xl font-800 tracking-tight text-white sm:text-3xl">Let's build your next product.</h2>
+          <p class="mx-auto mt-3 max-w-md text-white/70">
+            Tell us what you're trying to launch. We'll tell you the fastest honest path to get there.
+          </p>
+          <a href="/contact" class="mt-7 inline-block rounded-lg bg-white px-6 py-3 text-sm font-600 text-ink transition-colors hover:bg-white/90">
+            Start a conversation
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

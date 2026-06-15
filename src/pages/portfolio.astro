@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PortfolioGrid from '../components/PortfolioGrid.jsx';
+import { projects } from '../data/projects.js';
+---
+
+<Base title="Portfolio — Digitek Lab" description="Live products designed, built, and operated by Digitek Lab across education, retail tools, content, and SaaS.">
+  <main class="mx-auto max-w-6xl px-5 sm:px-8">
+    <section class="py-16 sm:py-20">
+      <p class="mb-4 font-mono text-xs uppercase tracking-widest text-faint">Portfolio</p>
+      <h1 class="max-w-2xl text-4xl font-800 leading-tight tracking-tight sm:text-5xl">
+        Products we've shipped and run.
+      </h1>
+      <p class="mt-5 max-w-xl text-lg text-muted">
+        Every project below is live. Most of them we built and operate ourselves —
+        which means we've handled the launches, the payments, the traffic, and the
+        maintenance, not just the design.
+      </p>
+    </section>
+
+    <section class="pb-8">
+      <PortfolioGrid client:load projects={projects} />
+    </section>
+
+    <section class="border-t border-line py-16">
+      <div class="rounded-2xl border border-line bg-surface p-10 text-center">
+        <h2 class="text-2xl font-800 tracking-tight">Want something like this?</h2>
+        <p class="mx-auto mt-3 max-w-md text-muted">
+          If one of these is close to what you need, we can build yours faster
+          because we've already solved the hard parts.
+        </p>
+        <a href="/contact" class="mt-7 inline-block rounded-lg bg-node-blue px-6 py-3 text-sm font-600 text-white transition-colors hover:bg-node-blue/90">
+          Let's build yours
+        </a>
+      </div>
+    </section>
+  </main>
+</Base>

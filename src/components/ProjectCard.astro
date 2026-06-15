@@ -1,0 +1,43 @@
+---
+const { project } = Astro.props;
+const dotColor = {
+  web: 'bg-node-blue',
+  platform: 'bg-node-green',
+  tool: 'bg-node-red',
+}[project.type] || 'bg-node-blue';
+---
+
+<a
+  href={project.url}
+  target="_blank"
+  rel="noopener"
+  class="group relative flex flex-col rounded-xl border border-line bg-panel p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-node-blue/40 hover:shadow-card-hover"
+>
+  <div class="mb-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class={`h-2 w-2 rounded-full ${dotColor}`}></span>
+      <span class="font-mono text-[11px] uppercase tracking-wider text-faint">{project.category}</span>
+    </div>
+    <span class="text-faint transition-all group-hover:translate-x-0.5 group-hover:text-node-blue">↗</span>
+  </div>
+
+  <h3 class="text-lg font-700 tracking-tight">{project.name}</h3>
+  <p class="mt-1 text-sm text-muted">{project.tagline}</p>
+
+  {project.bullets && (
+    <ul class="mt-4 space-y-1.5">
+      {project.bullets.map((b) => (
+        <li class="flex gap-2 text-[13px] text-ink-soft">
+          <span class="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-faint"></span>
+          <span>{b}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <div class="mt-4 flex flex-wrap gap-1.5 pt-1">
+    {project.tags.map((t) => (
+      <span class="rounded border border-line bg-surface px-2 py-0.5 font-mono text-[11px] text-muted">{t}</span>
+    ))}
+  </div>
+</a>
