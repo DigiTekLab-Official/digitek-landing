@@ -1,5 +1,5 @@
-// File: src/pages/api/contact.ts
-export const prerender = false; // Required if using Astro hybrid/static rendering mode
+// File: src/pages/api/contact.js
+export const prerender = false; // Required for Astro SSR
 
 export async function POST({ request }) {
   try {
@@ -10,34 +10,49 @@ export async function POST({ request }) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
     }
 
-    // TODO: Replace this with your actual Email Provider API (e.g., Resend, SendGrid)
-    // Example using Resend API to send TO info@digiteklab.com so Cloudflare catches it:
-    
-    const res = await fetch('https://api.resend.com/emails', {
+    // Sending via MailChannels natively on Cloudflare Pages (Free, no API key)
+    const sendEmail = await fetch('https://api.mailchannels.net/tx/v1/send', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer YOUR_RESEND_API_KEY` 
+        'content-type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Contact Form <noreply@digiteklab.com>',
-        to: ['info@digiteklab.com'], // Sent here so Cloudflare Email Routing forwards it
-        reply_to: email,
+        personalizations: [
+          {
+            to: [{ email: 'info@digiteklab.com', name: 'Digitek Lab' }],
+          },
+        ],
+        from: {
+          email: 'noreply@digiteklab.com', // Must be from your domain
+          name: 'Contact Form',
+        },
+        reply_to: {
+          email: email,
+          name: name,
+        },
         subject: `New Project Inquiry from ${name}`,
-        html: `
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Company:</strong> ${company || 'N/A'}</p>
-          <p><strong>Budget:</strong> ${budget || 'N/A'}</p>
-          <p><strong>Message:</strong><br/>${message}</p>
-        `
-      })
+        content: [
+          {
+            type: 'text/html',
+            value: `
+              <h3>New Lead from Digitek Lab</h3>
+              <p><strong>Name:</strong> ${name}</p>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>Company:</strong> ${company || 'N/A'}</p>
+              <p><strong>Budget:</strong> ${budget || 'N/A'}</p>
+              <p><strong>Message:</strong><br/>${message}</p>
+            `,
+          },
+        ],
+      }),
     });
 
-    if (res.ok) {
+    if (sendEmail.ok) {
       return new Response(JSON.stringify({ success: true }), { status: 200 });
     } else {
-      throw new Error('Email provider failed to send');
+      const errorText = await sendEmail.text();
+      console.error('MailChannels Error:', errorText);
+      return new Response(JSON.stringify({ error: "Email server rejected the message." }), { status: 500 });
     }
 
   } catch (error) {
