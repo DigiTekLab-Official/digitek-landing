@@ -1,0 +1,28 @@
+# Cloudflare Pages configuration for Digitek Lab.
+#
+# The contact form (functions/api/contact.js) emails submissions straight to
+# your Gmail via Cloudflare's Email Workers binding. Because the recipient is
+# already a verified Email Routing destination, NO separate Email Sending
+# onboarding is needed — your existing Email Routing setup is enough.
+#
+# If your Pages project is configured through the dashboard instead of this
+# file, mirror these settings there:
+#   - Settings → Functions → Bindings → add an "Email sending" binding:
+#       variable name: EMAIL
+#       destination address: ameer.itoa@gmail.com
+#   - Settings → Functions → Compatibility flags → add: nodejs_compat
+#   - Settings → Environment variables → CONTACT_TO / CONTACT_FROM (optional)
+
+name = "digitek-lab"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Email Workers binding, restricted to your verified Email Routing destination.
+send_email = [
+  { name = "EMAIL", destination_address = "ameer.itoa@gmail.com" }
+]
+
+[vars]
+CONTACT_TO = "ameer.itoa@gmail.com"
+CONTACT_FROM = "noreply@digiteklab.com"

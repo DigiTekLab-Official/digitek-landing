@@ -10,28 +10,29 @@ const budgets = [
 
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', company: '', budget: '', message: '' });
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+  const [form, setForm] = useState({ name: '', email: '', company: '', budget: '', message: '', website: '' });
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
-  const handleSubmit = async () => {
-    // Basic validation
-    if (!form.name || !form.email || !form.message) return;
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message || sending) return;
+    setSending(true);
+    setError('');
     try {
-      // Wires the form to your backend endpoint
-      const response = await fetch('/api/contact', { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify(form) 
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       });
-
-      if (response.ok) {
-        setSent(true);
-      } else {
-        console.error("Failed to send message.");
-      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+      setSent(true);
     } catch (err) {
-      console.error(err);
+      setError(err.message || 'Network error. Please try again or email us directly.');
+    } finally {
+      setSending(false);
     }
   };
 
@@ -45,18 +46,31 @@ export default function ContactForm() {
     return (
       <div className="rounded-2xl border border-node-green/30 bg-tint-green p-8 text-center">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-node-green/15 text-2xl text-node-green">✓</div>
-        <h3 className="text-lg font-bold text-ink">Message sent successfully.</h3>
+        <h3 className="text-lg font-bold text-ink">Message sent.</h3>
         <p className="mt-2 text-sm text-muted">
-          Thanks, {form.name.split(' ')[0] || 'there'}. We'll get back to you shortly.
-          For anything urgent, reach us directly on WhatsApp.
+          Thanks, {form.name.split(' ')[0] || 'there'}. We've received your message and
+          will get back to you shortly. For anything urgent, reach us directly on WhatsApp.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-panel p-6 shadow-card sm:p-8">
+    <form onSubmit={handleSubmit} noValidate className="rounded-2xl border border-line bg-panel p-6 shadow-card sm:p-8">
       <div className="grid gap-4">
+        {/* Honeypot — hidden from users and assistive tech, catches bots */}
+        <div hidden>
+          <label htmlFor="contact-website">Leave this field empty</label>
+          <input
+            id="contact-website"
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.website}
+            onChange={update('website')}
+          />
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contact-name" className={labelClass}>Name</label>
@@ -84,10 +98,19 @@ export default function ContactForm() {
           <label htmlFor="contact-message" className={labelClass}>Project description</label>
           <textarea id="contact-message" name="message" required className={`${inputClass} min-h-[120px] resize-y`} value={form.message} onChange={update('message')} placeholder="What are you trying to build?" />
         </div>
-        <button onClick={handleSubmit} className="mt-1 rounded-lg bg-node-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-node-blue/90">
-          Send message
+        {error && (
+          <p role="alert" className="rounded-lg border border-node-red/30 bg-tint-red px-4 py-3 text-sm text-node-red">
+            {error}
+          </p>
+        )}
+        <button
+          type="submit"
+          disabled={sending}
+          className="mt-1 rounded-lg bg-node-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-node-blue/90 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {sending ? 'Sending…' : 'Send message'}
         </button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -7,5 +7,8 @@ export default defineConfig({
   site: 'https://digiteklab.com',
   trailingSlash: 'never',
   output: 'static',
+  build: {
+    format: 'file'
+  },
   integrations: [react(), tailwind()],
 });

@@ -1,10 +1,26 @@
 ---
-const { project } = Astro.props;
-const dotColor = {
+interface Project {
+  url: string;
+  category: string;
+  type: string;
+  name: string;
+  tagline: string;
+  bullets?: string[];
+  tags: string[];
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props as Props;
+
+const dotColors: Record<string, string> = {
   web: 'bg-node-blue',
   platform: 'bg-node-green',
   tool: 'bg-node-red',
-}[project.type] || 'bg-node-blue';
+};
+const dotColor = dotColors[project.type] || 'bg-node-blue';
 ---
 
 <a

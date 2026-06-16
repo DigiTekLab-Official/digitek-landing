@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+/**
+ * @param {{ faqs?: { q: string; a: string }[] }} props
+ */
 export default function FAQ({ faqs = [] }) {
   const [open, setOpen] = useState(0);
 
