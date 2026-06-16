@@ -1,14 +1,13 @@
-# Cloudflare Pages configuration for Digitek Lab.
-# Email sending is handled natively via MailChannels HTTP fetch in the API route.
-# No Cloudflare Email bindings are required in the dashboard or config.
-
 name = "digitek-lab"
 pages_build_output_dir = "dist"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-# These are optional but good practice if you want to pull them into your Astro API route
-# instead of hardcoding the email addresses in the contact.ts file.
 CONTACT_TO = "ameer.itoa@gmail.com"
 CONTACT_FROM = "noreply@digiteklab.com"
+
+# This natively binds Cloudflare's Email Routing to your function
+[[send_email]]
+name = "EMAIL"
+destination_address = "ameer.itoa@gmail.com"
