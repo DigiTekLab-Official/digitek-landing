@@ -18,17 +18,31 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message || sending) return;
+    if (form.website) { setSent(true); return; }
     setSending(true);
     setError('');
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: '4eb356fa-9002-4fc8-8c57-b5354b06379c',
+          subject: `New project inquiry from ${form.name}`,
+          from_name: 'Digitek Lab website',
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          budget: form.budget,
+          message: form.message,
+          botcheck: form.website,
+        }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
-      setSent(true);
+      if (data.success === true) {
+        setSent(true);
+      } else {
+        throw new Error(data.message || 'Something went wrong. Please try again.');
+      }
     } catch (err) {
       setError(err.message || 'Network error. Please try again or email us directly.');
     } finally {
