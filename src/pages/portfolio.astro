@@ -4,9 +4,9 @@ import PortfolioGrid from '../components/PortfolioGrid.jsx';
 import { projects } from '../data/projects.js';
 ---
 
-<Base title="Portfolio — Digitek Lab" description="Live products designed, built, and operated by Digitek Lab across education, retail tools, content, and SaaS.">
-  <main class="mx-auto max-w-6xl px-5 sm:px-8">
-    <section class="py-16 sm:py-20">
+<Base title="Work — Digitek Lab" description="Live products designed, built, and operated by Digitek Lab across education, retail tools, content, and SaaS.">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <section class="reveal py-16 sm:py-20">
       <p class="mb-4 font-mono text-xs uppercase tracking-widest text-faint">Portfolio</p>
       <h1 class="max-w-2xl text-4xl font-800 leading-tight tracking-tight sm:text-5xl">
         Products we've shipped and run.
@@ -18,11 +18,19 @@ import { projects } from '../data/projects.js';
       </p>
     </section>
 
-    <section class="pb-8">
+    <section class="reveal pb-8">
+      <div class="mb-8">
+        <p class="mb-3 font-mono text-xs uppercase tracking-widest text-faint">
+          Portfolio
+        </p>
+        <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+          Live products
+        </h2>
+      </div>
       <PortfolioGrid client:load projects={projects} />
     </section>
 
-    <section class="border-t border-line py-16">
+    <section class="reveal border-t border-line py-16">
       <div class="rounded-2xl border border-line bg-surface p-10 text-center">
         <h2 class="text-2xl font-800 tracking-tight">Want something like this?</h2>
         <p class="mx-auto mt-3 max-w-md text-muted">
@@ -34,5 +42,5 @@ import { projects } from '../data/projects.js';
         </a>
       </div>
     </section>
-  </main>
+  </div>
 </Base>

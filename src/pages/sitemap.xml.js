@@ -1,4 +1,4 @@
-const pages = ['', 'portfolio', 'about', 'contact'];
+const pages = ['', 'services', 'portfolio', 'about', 'contact'];
 export function GET() {
   const urls = pages
     .map((p) => `  <url><loc>https://digiteklab.com/${p}</loc></url>`)

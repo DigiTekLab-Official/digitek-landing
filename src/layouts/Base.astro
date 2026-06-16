@@ -1,16 +1,20 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Reveal from "../components/Reveal.astro";
 
-const { title = 'Digitek Lab — Web, Mobile & Custom Software', description = 'Digitek Lab is a software studio building web, mobile, and custom applications for businesses — and running its own portfolio of live products.' } = Astro.props;
+const {
+  title = "Digitek Lab — Software studio for web, mobile, e-commerce & AI",
+  description = "Digitek Lab is a software studio building web, mobile, e-commerce/POS, and AI & automation products. Building technology since 2002. India & UAE.",
+} = Astro.props;
 
 const nav = [
-  { href: '/', label: 'Home' },
-  { href: '/portfolio', label: 'Portfolio' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: "/", label: "Home" },
+  { href: "/services", label: "Services" },
+  { href: "/portfolio", label: "Work" },
+  { href: "/about", label: "About" },
 ];
-
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <!doctype html>
@@ -19,12 +23,15 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/logo-transparent.png" />
+
     <title>{title}</title>
     <meta name="description" content={description} />
+
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/logo.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -32,91 +39,15 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
       rel="stylesheet"
     />
   </head>
+
   <body class="bg-base text-ink font-sans antialiased">
-    <!-- navbar -->
-    <header class="sticky top-0 z-50 border-b border-line bg-base/85 backdrop-blur-md">
-      <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a href="/" class="group flex shrink-0 items-center gap-2">
-          <img src="/logo-transparent.png" alt="Digitek Lab" class="h-9 w-9" />
-          <span class="whitespace-nowrap text-[15px] font-700 tracking-tight text-ink">
-            Digitek<span class="text-node-blue"> Lab</span>
-          </span>
-        </a>
-        <div class="flex items-center gap-1">
-          <ul class="hidden items-center gap-0.5 text-sm sm:flex">
-            {nav.map((item) => {
-              const active = path === item.href;
-              return (
-                <li>
-                  <a
-                    href={item.href}
-                    class={`rounded-md px-3 py-2 font-500 transition-colors ${
-                      active ? 'text-ink' : 'text-muted hover:text-ink'
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-          <a
-            href="/contact"
-            class="ml-2 hidden rounded-lg bg-node-blue px-4 py-2 text-sm font-600 text-white transition-colors hover:bg-node-blue/90 sm:inline-block"
-          >
-            Start a project
-          </a>
-          <!-- mobile: compact links -->
-          <ul class="flex items-center gap-0.5 text-sm sm:hidden">
-            {nav.filter((i) => i.href !== '/').map((item) => {
-              const active = path === item.href;
-              return (
-                <li>
-                  <a
-                    href={item.href}
-                    class={`rounded-md px-2.5 py-2 font-500 transition-colors ${
-                      active ? 'text-ink' : 'text-muted hover:text-ink'
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </nav>
-    </header>
+    <Header nav={nav} />
 
-    <slot />
+    <main id="main">
+      <slot />
+    </main>
 
-    <!-- footer -->
-    <footer class="mt-24 border-t border-line bg-surface">
-      <div class="mx-auto max-w-6xl px-5 py-14 sm:px-8">
-        <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-          <div class="max-w-xs">
-            <div class="flex items-center gap-2">
-              <img src="/logo-transparent.png" alt="Digitek Lab" class="h-9 w-9" />
-              <span class="text-[15px] font-700 tracking-tight">
-                Digitek<span class="text-node-blue"> Lab</span>
-              </span>
-            </div>
-            <p class="mt-4 text-sm text-muted">
-              A software studio building web, mobile, and custom applications —
-              and running our own products.
-            </p>
-          </div>
-          <div class="grid grid-cols-2 gap-x-12 gap-y-2 text-sm sm:grid-cols-1">
-            {nav.map((item) => (
-              <a href={item.href} class="text-muted transition-colors hover:text-ink">{item.label}</a>
-            ))}
-          </div>
-        </div>
-        <div class="mt-10 flex flex-col gap-2 border-t border-line pt-6 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Digitek Lab. All rights reserved.</p>
-          <p>Tamil Nadu, India</p>
-        </div>
-      </div>
-    </footer>
+    <Footer />
+    <Reveal />
   </body>
 </html>

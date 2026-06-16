@@ -5,6 +5,7 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://digiteklab.com',
+  trailingSlash: 'never',
   output: 'static',
   integrations: [react(), tailwind()],
 });

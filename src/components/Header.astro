@@ -1,0 +1,181 @@
+---
+type NavItem = { href: string; label: string };
+
+interface Props {
+  nav?: NavItem[];
+}
+
+const {
+  nav = [
+    { href: "/", label: "Home" },
+    { href: "/services", label: "Services" },
+    { href: "/portfolio", label: "Work" },
+    { href: "/about", label: "About" },
+  ],
+}: Props = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<!-- Skip link for keyboard / screen-reader users -->
+<a
+  href="#main"
+  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-node-blue focus:px-4 focus:py-2 focus:text-sm focus:font-600 focus:text-white"
+>
+  Skip to content
+</a>
+
+<header
+  class="sticky top-0 z-50 border-b border-line bg-base/85 backdrop-blur-md supports-[backdrop-filter]:bg-base/70"
+>
+  <nav
+    aria-label="Primary"
+    class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8"
+  >
+    <!-- LOGO -->
+    <a
+      href="/"
+      class="group flex shrink-0 items-center gap-2 rounded-md"
+      aria-label="Digitek Lab — home"
+    >
+      <img
+        src="/logo-transparent.png"
+        alt=""
+        width="36"
+        height="36"
+        class="h-9 w-9"
+        loading="eager"
+        decoding="async"
+      />
+      <span
+        class="whitespace-nowrap text-[15px] font-700 tracking-tight text-ink"
+      >
+        Digitek <span class="text-node-blue">Lab</span>
+      </span>
+    </a>
+
+    <!-- DESKTOP NAV -->
+    <ul class="hidden items-center gap-1 text-sm sm:flex">
+      {
+        nav.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <li>
+              <a
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                class={`rounded-md px-3 py-2 font-500 transition-colors ${
+                  active ? "text-ink" : "text-muted hover:text-ink"
+                }`}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <div class="flex items-center gap-1">
+      <a
+        href="/contact"
+        class="hidden rounded-lg bg-node-blue px-4 py-2 text-sm font-600 text-white transition-colors hover:bg-node-blue/90 sm:inline-block"
+      >
+        Start a project
+      </a>
+
+      <!-- MOBILE MENU TOGGLE -->
+      <button
+        type="button"
+        id="nav-toggle"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink transition-colors hover:bg-surface sm:hidden"
+      >
+        <span class="sr-only">Toggle navigation menu</span>
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            id="icon-open"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+          <path
+            id="icon-close"
+            class="hidden"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 6l12 12M6 18L18 6"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" hidden class="border-t border-line bg-base sm:hidden">
+    <ul class="space-y-1 px-5 py-4 text-sm">
+      {
+        nav.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <li>
+              <a
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                class={`block rounded-md px-3 py-2.5 font-500 transition-colors ${
+                  active ? "bg-surface text-ink" : "text-muted hover:bg-surface hover:text-ink"
+                }`}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })
+      }
+      <li class="pt-2">
+        <a
+          href="/contact"
+          class="block rounded-lg bg-node-blue px-4 py-2.5 text-center text-sm font-600 text-white transition-colors hover:bg-node-blue/90"
+        >
+          Start a project
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const iconOpen = document.getElementById("icon-open");
+  const iconClose = document.getElementById("icon-close");
+
+  const setOpen = (open: boolean) => {
+    if (!toggle || !menu || !iconOpen || !iconClose) return;
+    toggle.setAttribute("aria-expanded", String(open));
+    menu.hidden = !open;
+    iconOpen.classList.toggle("hidden", open);
+    iconClose.classList.toggle("hidden", !open);
+  };
+
+  toggle?.addEventListener("click", () => {
+    setOpen(toggle.getAttribute("aria-expanded") !== "true");
+  });
+
+  // Close on Escape and when leaving mobile breakpoint
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+  const mq = window.matchMedia("(min-width: 640px)");
+  mq.addEventListener("change", (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>

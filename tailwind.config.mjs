@@ -16,12 +16,12 @@ export default {
         'line-soft': '#eef0f4',
         ink: '#0f1320',
         'ink-soft': '#3a4154',
-        muted: '#5d6478',
-        faint: '#8b91a3',
+        muted: '#4b5263',
+        faint: '#6b7280',
         node: {
           blue: '#3a5bdc',
-          red: '#e03b3b',
-          green: '#1f9d44',
+          red: '#c92a2a',
+          green: '#157a33',
           purple: '#6d34c8',
         },
         tint: {

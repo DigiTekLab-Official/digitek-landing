@@ -1,89 +1,141 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from "../layouts/Base.astro";
+import { services, stats } from "../data/projects.js";
 
-const capabilities = [
-  { c: 'blue', t: 'Web development', d: 'Marketing sites, web apps, dashboards, and e-commerce on a fast, static-first stack.' },
-  { c: 'red', t: 'Mobile apps', d: 'Cross-platform Android & iOS apps from a single codebase.' },
-  { c: 'green', t: 'POS & retail integration', d: 'Connecting online storefronts to existing billing, barcode, and inventory systems.' },
-  { c: 'purple', t: 'Custom software & AI', d: 'Internal tools, automations, and AI agents wired into real workflows.' },
-];
-
-const tintMap = {
-  blue: 'bg-tint-blue text-node-blue',
-  red: 'bg-tint-red text-node-red',
-  green: 'bg-tint-green text-node-green',
-  purple: 'bg-tint-purple text-node-purple',
+const tintMap: Record<string, string> = {
+  blue: "bg-tint-blue text-node-blue",
+  red: "bg-tint-red text-node-red",
+  green: "bg-tint-green text-node-green",
+  purple: "bg-tint-purple text-node-purple",
 };
+
+const work = [
+  {
+    n: "01",
+    color: "blue",
+    t: "Understand the problem",
+    d: "We study your business goals, customers, and existing workflows before designing the right solution.",
+  },
+  {
+    n: "02",
+    color: "green",
+    t: "Build to operate",
+    d: "We write clean, maintainable systems on modern stacks — and we build like we'll have to run it, because often we do.",
+  },
+  {
+    n: "03",
+    color: "purple",
+    t: "Launch and improve",
+    d: "After launch we keep measuring and improving through optimization, automation, and new features.",
+  },
+];
 ---
 
-<Base title="About — Digitek Lab" description="Digitek Lab is a software studio building web, mobile, and custom applications, founded on a background in computer systems, POS, and enterprise operations.">
-  <main class="mx-auto max-w-3xl px-5 sm:px-8">
-    <section class="py-16 sm:py-20">
-      <p class="mb-4 font-mono text-xs uppercase tracking-widest text-faint">About</p>
+<Base
+  title="About — Digitek Lab"
+  description="Digitek Lab is a software studio whose roots go back to a 2002 computer & POS business (IC Tech). Today we build modern web, mobile, e-commerce, and AI products."
+>
+  <div class="mx-auto max-w-3xl px-5 sm:px-8">
+    <section class="reveal py-16 sm:py-20">
+      <p class="mb-4 font-mono text-xs uppercase tracking-widest text-faint">
+        About
+      </p>
       <h1 class="text-4xl font-800 leading-tight tracking-tight sm:text-5xl">
-        A software studio with<br />real-world foundations.
+        A software studio with
+        <span class="text-node-blue">two decades of roots.</span>
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-ink-soft">
-        Digitek Lab is a software studio building web, mobile, and custom
-        applications for businesses. We design and build digital products — and
-        we run several of our own, so we understand what it takes to launch and
-        operate something real, not just hand off a project.
+        Digitek Lab is a software studio building web, mobile, e-commerce &amp;
+        POS, and AI &amp; automation products. Our story starts in 2002 as
+        <strong class="font-700 text-ink">IC Tech</strong>, a computer &amp; POS
+        systems business serving local retailers and offices.
       </p>
       <p class="mt-4 text-lg leading-relaxed text-ink-soft">
-        Behind the studio is a long background in technology: years spent running
-        a computer and POS systems business, followed by a decade inside a large
-        enterprise. That history means we understand billing, retail operations,
-        and process discipline in a way most web shops never touch.
+        Digitek Lab is that company's modern continuation. The hardware-and-POS
+        roots gave us a practical, business-first view of technology — and that
+        enterprise background still shapes how we build software today: reliable,
+        operable, and grounded in what a business actually needs.
+      </p>
+      <p class="mt-4 text-lg leading-relaxed text-ink-soft">
+        Today we design, build, and operate 10+ live products in-house, run live
+        online payments in production, and serve clients across India and the
+        UAE from our base in Tamil Nadu.
       </p>
     </section>
 
-    <!-- capabilities -->
-    <section class="border-t border-line py-14">
-      <h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">What we do</h2>
+    <!-- STATS -->
+    <section class="reveal border-t border-line py-12">
+      <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">
+        {
+          stats.map((s) => (
+            <div class="bg-panel p-5 text-center">
+              <dt class="text-2xl font-800 tracking-tight text-ink">
+                {s.value}
+              </dt>
+              <dd class="mt-1 text-xs leading-snug text-muted">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- CAPABILITIES -->
+    <section class="reveal border-t border-line py-14">
+      <h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">
+        What we build
+      </h2>
       <div class="grid gap-4 sm:grid-cols-2">
-        {capabilities.map((cap) => (
-          <div class="rounded-xl border border-line bg-panel p-5 shadow-card">
-            <div class={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${tintMap[cap.c]} text-base font-700`}>+</div>
-            <h3 class="font-700">{cap.t}</h3>
-            <p class="mt-1.5 text-sm text-muted">{cap.d}</p>
-          </div>
-        ))}
+        {
+          services.map((s) => (
+            <div class="rounded-xl border border-line bg-panel p-5 shadow-card">
+              <div
+                class={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${tintMap[s.color]} text-base font-700`}
+              >
+                +
+              </div>
+              <h3 class="font-700">{s.title}</h3>
+              <p class="mt-1.5 text-sm text-muted">{s.desc}</p>
+            </div>
+          ))
+        }
       </div>
     </section>
 
-    <!-- approach -->
-    <section class="border-t border-line py-14">
-      <h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">How we work</h2>
+    <!-- HOW WE WORK -->
+    <section class="reveal border-t border-line py-14">
+      <h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">
+        How we work
+      </h2>
       <div class="space-y-5">
-        <div class="flex gap-4">
-          <span class="mt-0.5 font-mono text-sm font-600 text-node-blue">01</span>
-          <div>
-            <h3 class="font-700">Understand the business first</h3>
-            <p class="mt-1 text-sm text-muted">We start with how your operations actually work — the billing, the stock, the customers — before writing any code.</p>
-          </div>
-        </div>
-        <div class="flex gap-4">
-          <span class="mt-0.5 font-mono text-sm font-600 text-node-green">02</span>
-          <div>
-            <h3 class="font-700">Build in clear phases</h3>
-            <p class="mt-1 text-sm text-muted">We deliver in stages so you see working software early and carry less risk, instead of waiting months for one big launch.</p>
-          </div>
-        </div>
-        <div class="flex gap-4">
-          <span class="mt-0.5 font-mono text-sm font-600 text-node-red">03</span>
-          <div>
-            <h3 class="font-700">Ship, then support</h3>
-            <p class="mt-1 text-sm text-muted">We launch it properly and stay available — because we run our own products and know what week-two looks like.</p>
-          </div>
-        </div>
+        {
+          work.map((w) => (
+            <div class="flex gap-4">
+              <span
+                class={`mt-0.5 font-mono text-sm font-600 ${tintMap[w.color].split(" ")[1]}`}
+              >
+                {w.n}
+              </span>
+              <div>
+                <h3 class="font-700">{w.t}</h3>
+                <p class="mt-1 text-sm text-muted">{w.d}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </section>
 
-    <section class="border-t border-line py-16 text-center">
-      <h2 class="text-2xl font-800 tracking-tight">Have a project in mind?</h2>
-      <a href="/contact" class="mt-6 inline-block rounded-lg bg-node-blue px-6 py-3 text-sm font-600 text-white transition-colors hover:bg-node-blue/90">
-        Get in touch
+    <section class="reveal border-t border-line py-16 text-center">
+      <h2 class="text-2xl font-800 tracking-tight">Have a product idea?</h2>
+      <p class="mx-auto mt-3 max-w-md text-sm text-muted">
+        Let's turn it into a modern, well-built digital product.
+      </p>
+      <a
+        href="/contact"
+        class="mt-6 inline-block rounded-lg bg-node-blue px-6 py-3 text-sm font-600 text-white transition-colors hover:bg-node-blue/90"
+      >
+        Start a conversation
       </a>
     </section>
-  </main>
+  </div>
 </Base>

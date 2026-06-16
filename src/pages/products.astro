@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { projects } from "../data/projects.js";
+
+const products = projects.filter((p) => p.featured);
+---
+
+<Base
+  title="Products — Digitek Lab"
+  description="Explore Digitek Lab products, AI tools, digital platforms, and technology solutions."
+>
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <section class="reveal py-16 sm:py-20">
+      <p class="mb-4 font-mono text-xs uppercase tracking-widest text-faint">
+        Products
+      </p>
+
+      <h1
+        class="max-w-3xl text-4xl font-800 leading-tight tracking-tight sm:text-5xl"
+      >
+        Digital products we build and operate.
+      </h1>
+
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
+        Digitek Lab builds and operates web platforms, online products, developer
+        tools, and digital ecosystems designed for real users.
+      </p>
+    </section>
+
+    <section class="reveal pb-16">
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </section>
+
+    <section class="reveal border-t border-line py-16">
+      <div
+        class="rounded-2xl border border-line bg-ink p-10 text-center sm:p-16"
+      >
+        <h2 class="text-3xl font-800 tracking-tight text-white">
+          Have an idea for a digital product?
+        </h2>
+
+        <p class="mx-auto mt-4 max-w-xl text-white/80">
+          We help transform ideas into scalable websites, AI tools,
+          applications, and online platforms.
+        </p>
+
+        <a
+          href="/contact"
+          class="mt-8 inline-block rounded-lg bg-white px-7 py-3 text-sm font-600 text-ink"
+        >
+          Build your product
+        </a>
+      </div>
+    </section>
+  </div>
+</Base>

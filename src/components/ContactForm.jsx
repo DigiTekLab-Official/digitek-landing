@@ -25,7 +25,10 @@ export default function ContactForm() {
   };
 
   const inputClass =
-    'w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink placeholder:text-faint focus:border-node-blue focus:outline-none focus:ring-2 focus:ring-node-blue/15';
+    'w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-node-blue focus:outline-none focus:ring-2 focus:ring-node-blue/15';
+
+  const labelClass =
+    'mb-1.5 block font-mono text-xs uppercase tracking-wider text-muted';
 
   if (sent) {
     return (
@@ -45,30 +48,30 @@ export default function ContactForm() {
       <div className="grid gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-faint">Name</label>
-            <input className={inputClass} value={form.name} onChange={update('name')} placeholder="Your name" />
+            <label htmlFor="contact-name" className={labelClass}>Name</label>
+            <input id="contact-name" name="name" autoComplete="name" required className={inputClass} value={form.name} onChange={update('name')} placeholder="Your name" />
           </div>
           <div>
-            <label className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-faint">Email</label>
-            <input className={inputClass} type="email" value={form.email} onChange={update('email')} placeholder="you@company.com" />
+            <label htmlFor="contact-email" className={labelClass}>Email</label>
+            <input id="contact-email" name="email" type="email" autoComplete="email" required className={inputClass} value={form.email} onChange={update('email')} placeholder="you@company.com" />
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-faint">Company</label>
-            <input className={inputClass} value={form.company} onChange={update('company')} placeholder="Optional" />
+            <label htmlFor="contact-company" className={labelClass}>Company</label>
+            <input id="contact-company" name="company" autoComplete="organization" className={inputClass} value={form.company} onChange={update('company')} placeholder="Optional" />
           </div>
           <div>
-            <label className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-faint">Budget</label>
-            <select className={inputClass} value={form.budget} onChange={update('budget')}>
+            <label htmlFor="contact-budget" className={labelClass}>Budget</label>
+            <select id="contact-budget" name="budget" className={inputClass} value={form.budget} onChange={update('budget')}>
               <option value="">Select a range</option>
               {budgets.map((b) => <option key={b} value={b}>{b}</option>)}
             </select>
           </div>
         </div>
         <div>
-          <label className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-faint">Project description</label>
-          <textarea className={`${inputClass} min-h-[120px] resize-y`} value={form.message} onChange={update('message')} placeholder="What are you trying to build?" />
+          <label htmlFor="contact-message" className={labelClass}>Project description</label>
+          <textarea id="contact-message" name="message" required className={`${inputClass} min-h-[120px] resize-y`} value={form.message} onChange={update('message')} placeholder="What are you trying to build?" />
         </div>
         <button onClick={handleSubmit} className="mt-1 rounded-lg bg-node-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-node-blue/90">
           Send message

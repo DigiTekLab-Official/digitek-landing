@@ -1,119 +1,438 @@
 ---
-import Base from '../layouts/Base.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { projects, services } from '../data/projects.js';
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import HeroGraph from "../components/HeroGraph.jsx";
+import FAQ from "../components/FAQ.jsx";
+import {
+  projects,
+  services,
+  stats,
+  process,
+  techStack,
+  industries,
+  faqs,
+} from "../data/projects.js";
 
 const featured = projects.filter((p) => p.featured);
-const serviceTint = {
-  blue: 'bg-tint-blue text-node-blue',
-  red: 'bg-tint-red text-node-red',
-  green: 'bg-tint-green text-node-green',
-  purple: 'bg-tint-purple text-node-purple',
+const [lead, ...rest] = featured;
+const restFeatured = rest.slice(0, 4);
+
+const serviceTint: Record<string, string> = {
+  blue: "bg-tint-blue text-node-blue",
+  red: "bg-tint-red text-node-red",
+  green: "bg-tint-green text-node-green",
+  purple: "bg-tint-purple text-node-purple",
 };
+
+const stepText: Record<string, string> = {
+  blue: "text-node-blue",
+  red: "text-node-red",
+  green: "text-node-green",
+  purple: "text-node-purple",
+};
+
+// Two copies of the tech list so the marquee can loop seamlessly.
+const marquee = [...techStack, ...techStack];
 ---
 
 <Base>
-  <main>
-    <!-- HERO -->
-    <section class="relative overflow-hidden border-b border-line bg-surface">
-      <div class="pointer-events-none absolute inset-0 opacity-60"
-           style="background-image: radial-gradient(circle at 1px 1px, #dfe2ea 1px, transparent 0); background-size: 28px 28px;"></div>
-      <div class="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
-        <p class="rise rise-1 mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-xs font-500 text-muted shadow-soft">
+  <!-- 1 · HERO -->
+  <section class="relative overflow-hidden border-b border-line">
+    <div
+      class="mx-auto grid max-w-6xl gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1.2fr_1fr] lg:items-center"
+    >
+      <div>
+        <p
+          class="rise rise-1 mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-xs font-500 text-muted shadow-soft"
+        >
           <span class="h-1.5 w-1.5 rounded-full bg-node-green"></span>
-          Software studio · India
+          Software studio · Building technology since 2002
         </p>
-        <h1 class="rise rise-2 max-w-3xl text-4xl font-800 leading-[1.05] tracking-tight sm:text-6xl">
-          Web, mobile &amp; custom software,
-          <span class="text-node-blue">built to ship.</span>
+
+        <h1
+          class="rise rise-2 text-5xl font-800 leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl"
+        >
+          Software that
+          <span class="block text-node-blue">ships and scales.</span>
         </h1>
-        <p class="rise rise-3 mt-6 max-w-xl text-lg text-muted">
-          We design, build, and run real digital products — from online storefronts
-          and billing-system integrations to mobile apps and automation. Engineered
-          to launch, not to sit in a portfolio.
+
+        <p class="rise rise-3 mt-7 max-w-lg text-lg leading-relaxed text-muted">
+          Digitek Lab designs, builds, and operates products across web, mobile,
+          e-commerce &amp; POS, and AI &amp; automation — for businesses in India
+          and the UAE.
         </p>
-        <div class="rise rise-4 mt-8 flex flex-wrap gap-3">
-          <a href="/contact" class="rounded-lg bg-node-blue px-5 py-3 text-sm font-600 text-white shadow-soft transition-colors hover:bg-node-blue/90">
+
+        <div class="rise rise-4 mt-9 flex flex-wrap gap-3">
+          <a
+            href="/contact"
+            class="rounded-lg bg-node-blue px-6 py-3.5 text-sm font-600 text-white shadow-soft transition-colors hover:bg-node-blue/90"
+          >
             Start a project
           </a>
-          <a href="/portfolio" class="rounded-lg border border-line bg-white px-5 py-3 text-sm font-600 text-ink shadow-soft transition-colors hover:border-faint">
-            View our work
+
+          <a
+            href="/portfolio"
+            class="rounded-lg border border-line bg-white px-6 py-3.5 text-sm font-600 text-ink shadow-soft transition-colors hover:border-faint"
+          >
+            See our work
           </a>
         </div>
       </div>
+
+      <div class="rise rise-3">
+        <HeroGraph client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · TRUST / STATS BAND -->
+  <section class="reveal border-b border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-5 sm:px-8">
+      <dl
+        class="grid grid-cols-2 gap-px overflow-hidden border-x border-line bg-line lg:grid-cols-4"
+      >
+        {
+          stats.map((s) => (
+            <div class="bg-surface p-7 sm:p-8">
+              <dt class="text-3xl font-800 tracking-tight text-ink sm:text-4xl">
+                {s.value}
+              </dt>
+              <dd class="mt-2 text-sm font-600 text-ink-soft">{s.label}</dd>
+              <dd class="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-faint">
+                {s.note}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <!-- 3 · SERVICES -->
+    <section class="reveal py-16 sm:py-20">
+      <div class="mb-10 flex items-end justify-between gap-4">
+        <div>
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-faint">
+            What we do
+          </p>
+          <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+            Four things we build well
+          </h2>
+        </div>
+        <a
+          href="/services"
+          class="hidden text-sm font-600 text-node-blue hover:underline sm:inline"
+        >
+          All services →
+        </a>
+      </div>
+
+      <div
+        class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {
+          services.map((s) => (
+            <a
+              href={`/services#${s.id}`}
+              class="group flex flex-col bg-panel p-7 transition-colors hover:bg-surface"
+            >
+              <div
+                class={`mb-5 flex h-11 w-11 items-center justify-center rounded-lg ${serviceTint[s.color]} text-xl font-700`}
+              >
+                +
+              </div>
+              <h3 class="text-lg font-700">{s.title}</h3>
+              <ul class="mt-4 space-y-2">
+                {s.points.slice(0, 3).map((p) => (
+                  <li class="flex gap-2 text-[13px] leading-relaxed text-ink-soft">
+                    <span class={`mt-[7px] h-1 w-1 shrink-0 rounded-full ${serviceTint[s.color]}`} />
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </a>
+          ))
+        }
+      </div>
     </section>
 
-    <div class="mx-auto max-w-6xl px-5 sm:px-8">
-      <!-- SERVICES -->
-      <section class="py-16">
-        <h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">What we build</h2>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((s) => (
-            <div class="rounded-xl border border-line bg-panel p-6 shadow-card transition-shadow hover:shadow-card-hover">
-              <div class={`mb-4 flex h-10 w-10 items-center justify-center rounded-lg ${serviceTint[s.color]} text-lg font-700`}>+</div>
-              <h3 class="font-700">{s.title}</h3>
-              <p class="mt-2 text-sm text-muted">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+    <!-- 4 · FEATURED WORK -->
+    <section class="reveal border-t border-line py-16 sm:py-20">
+      <div class="mb-2 flex items-end justify-between gap-4">
+        <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+          Products we build &amp; operate
+        </h2>
+        <a
+          href="/portfolio"
+          class="text-sm font-600 text-node-blue hover:underline"
+        >
+          All work →
+        </a>
+      </div>
 
-      <!-- PRODUCTS WE'VE BUILT -->
-      <section class="border-t border-line py-16">
-        <div class="mb-2 flex items-baseline justify-between">
-          <h2 class="text-2xl font-800 tracking-tight">Products we've built</h2>
-          <a href="/portfolio" class="text-sm font-600 text-node-blue hover:underline">All work →</a>
-        </div>
-        <p class="mb-8 max-w-xl text-sm text-muted">
-          A selection of live products we've designed, built, and operate ourselves —
-          not client brochures. The strongest proof a studio can show is its own shipped work.
-        </p>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => <ProjectCard project={p} />)}
-        </div>
-      </section>
+      <p class="mb-10 max-w-xl text-sm text-muted">
+        Every product below is live. Most of them we built and operate ourselves —
+        including live online payments in production.
+      </p>
 
-      <!-- WHY -->
-      <section class="border-t border-line py-16">
-        <div class="grid gap-10 lg:grid-cols-[1fr_1.5fr]">
-          <h2 class="text-2xl font-800 leading-tight tracking-tight">
-            Why teams<br />work with us
-          </h2>
-          <div class="grid gap-x-10 gap-y-7 sm:grid-cols-2">
-            <div>
-              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-blue"></span>We run our own products</h3>
-              <p class="mt-2 text-sm text-muted">We don't just build and hand off — we operate live platforms with real users and payments, so we know what it takes to keep something running.</p>
-            </div>
-            <div>
-              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-green"></span>Retail &amp; POS fluency</h3>
-              <p class="mt-2 text-sm text-muted">Billing systems, barcodes, inventory, and the physical store side — we understand the operations, not just the website.</p>
-            </div>
-            <div>
-              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-red"></span>Enterprise discipline</h3>
-              <p class="mt-2 text-sm text-muted">Years inside large organizations means we bring structure, documentation, and process — not just code that works once.</p>
-            </div>
-            <div>
-              <h3 class="flex items-center gap-2 font-700"><span class="h-2 w-2 rounded-full bg-node-purple"></span>Fast, modern stack</h3>
-              <p class="mt-2 text-sm text-muted">Static-first builds on a modern toolchain — fast to load, easy to scale, and deployed on global infrastructure.</p>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <a
+          href={lead.url}
+          target="_blank"
+          rel="noopener"
+          class="group flex flex-col self-start rounded-2xl border border-line bg-ink p-8 text-white shadow-card transition-all hover:-translate-y-0.5 hover:shadow-card-hover sm:p-10"
+        >
+          <div class="mb-4 flex items-center justify-between">
+            <span
+              class="font-mono text-[11px] uppercase tracking-wider text-white/50"
+            >
+              {lead.category}
+            </span>
+            <span
+              aria-hidden="true"
+              class="text-white/70 transition-all group-hover:translate-x-0.5 group-hover:text-white"
+              >↗</span
+            >
+          </div>
+
+          <h3 class="text-2xl font-800 tracking-tight">{lead.name}</h3>
+          <p class="mt-2 max-w-sm text-sm text-white/80">{lead.tagline}</p>
+          <p class="mt-2 max-w-sm text-sm text-white/80">
+            Built, launched, and processing real payments in production.
+          </p>
+
+          <div class="mt-8">
+            <p
+              class="mb-3 font-mono text-[11px] uppercase tracking-wider text-white/60"
+            >
+              Highlights
+            </p>
+            <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {
+                lead.bullets.map((b) => (
+                  <li class="flex gap-2 text-[13px] text-white/80">
+                    <span class="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-node-blue" />
+                    <span>{b}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <div
+              class="mt-6 flex flex-wrap gap-1.5 border-t border-white/10 pt-5"
+            >
+              {
+                lead.tags.map((t) => (
+                  <span class="rounded border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-[11px] text-white/80">
+                    {t}
+                  </span>
+                ))
+              }
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </a>
 
-    <!-- CTA -->
-    <section class="border-t border-line bg-surface">
-      <div class="mx-auto max-w-6xl px-5 py-20 sm:px-8">
-        <div class="rounded-2xl border border-line bg-ink p-10 text-center sm:p-14">
-          <h2 class="text-2xl font-800 tracking-tight text-white sm:text-3xl">Let's build your next product.</h2>
-          <p class="mx-auto mt-3 max-w-md text-white/70">
-            Tell us what you're trying to launch. We'll tell you the fastest honest path to get there.
-          </p>
-          <a href="/contact" class="mt-7 inline-block rounded-lg bg-white px-6 py-3 text-sm font-600 text-ink transition-colors hover:bg-white/90">
-            Start a conversation
-          </a>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {restFeatured.map((p) => <ProjectCard project={p} />)}
         </div>
       </div>
     </section>
-  </main>
+
+    <!-- 5 · AI & AUTOMATION HIGHLIGHT -->
+    <section class="reveal border-t border-line py-16 sm:py-20">
+      <div
+        class="overflow-hidden rounded-2xl border border-line bg-surface"
+      >
+        <div class="grid gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+          <div>
+            <p
+              class="mb-3 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-node-purple"
+            >
+              <span class="h-1.5 w-1.5 rounded-full bg-node-purple"></span>
+              One of our four pillars
+            </p>
+            <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+              Practical AI &amp; automation
+            </h2>
+            <p class="mt-4 max-w-md text-muted">
+              We use AI where it genuinely earns its place — not as a buzzword.
+              That means automating the busywork, building AI-assisted tools your
+              team actually uses, and wiring intelligence into the systems you
+              already run.
+            </p>
+            <a
+              href="/services#ai"
+              class="mt-7 inline-flex items-center gap-1 text-sm font-600 text-node-purple hover:underline"
+            >
+              How we approach AI →
+            </a>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            {
+              [
+                {
+                  t: "Workflow automation",
+                  d: "Remove repetitive manual steps across operations, content, and data.",
+                },
+                {
+                  t: "AI-assisted tools",
+                  d: "Internal assistants and content systems that speed up real work.",
+                },
+                {
+                  t: "Diagnostic & agent systems",
+                  d: "Agent-style flows that triage, recommend, and route intelligently.",
+                },
+                {
+                  t: "Grounded integrations",
+                  d: "AI connected to your data and tools — measured, not magical.",
+                },
+              ].map((c) => (
+                <div class="rounded-xl border border-line bg-panel p-5 shadow-soft">
+                  <h3 class="text-sm font-700">{c.t}</h3>
+                  <p class="mt-1.5 text-[13px] leading-relaxed text-muted">
+                    {c.d}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · PROCESS -->
+    <section class="reveal border-t border-line py-16 sm:py-20">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-faint">
+        How we work
+      </p>
+      <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+        From idea to operating product
+      </h2>
+
+      <div
+        class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {
+          process.map((p) => (
+            <div class="bg-panel p-7">
+              <span class={`font-mono text-2xl font-700 ${stepText[p.color]}`}>
+                {p.step}
+              </span>
+              <h3 class="mt-4 font-700">{p.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{p.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <!-- 7 · TECH STACK MARQUEE -->
+  <section class="reveal border-y border-line bg-surface py-12">
+    <div class="mx-auto max-w-6xl px-5 sm:px-8">
+      <p
+        class="mb-6 text-center font-mono text-xs uppercase tracking-widest text-faint"
+      >
+        Built with a modern, production-proven stack
+      </p>
+    </div>
+    <div class="marquee-mask overflow-hidden">
+      <ul class="marquee-track gap-3" aria-label="Technologies we use">
+        {
+          marquee.map((t, i) => (
+            <li
+              aria-hidden={i >= techStack.length ? "true" : undefined}
+              class="whitespace-nowrap rounded-full border border-line bg-panel px-5 py-2 text-sm font-600 text-ink-soft shadow-soft"
+            >
+              {t}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <!-- 8 · INDUSTRIES -->
+    <section class="reveal py-16 sm:py-20">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-faint">
+        Industries we serve
+      </p>
+      <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+        Where our work lives
+      </h2>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          industries.map((ind) => (
+            <div class="rounded-2xl border border-line bg-panel p-6 shadow-soft">
+              <div
+                class={`mb-4 h-1.5 w-10 rounded-full ${serviceTint[ind.color]}`}
+              />
+              <h3 class="font-700">{ind.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{ind.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 9 · FAQ -->
+    <section class="reveal border-t border-line py-16 sm:py-20">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
+        <div>
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-faint">
+            FAQ
+          </p>
+          <h2 class="text-3xl font-800 tracking-tight sm:text-4xl">
+            Straight answers
+          </h2>
+          <p class="mt-4 max-w-sm text-muted">
+            No spin — here's who we are and what we can actually do. Have a
+            question we didn't cover?
+          </p>
+          <a
+            href="/contact"
+            class="mt-5 inline-flex text-sm font-600 text-node-blue hover:underline"
+          >
+            Ask us directly →
+          </a>
+        </div>
+
+        <FAQ client:visible faqs={faqs} />
+      </div>
+    </section>
+  </div>
+
+  <!-- 10 · FINAL CTA -->
+  <section class="border-t border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+      <div
+        class="relative overflow-hidden rounded-2xl border border-line bg-ink p-10 text-center sm:p-16"
+      >
+        <h2 class="text-3xl font-800 tracking-tight text-white sm:text-4xl">
+          Let's build your next product.
+        </h2>
+        <p class="mx-auto mt-3 max-w-md text-white/80">
+          Web, mobile, e-commerce &amp; POS, or AI &amp; automation — tell us what
+          you're trying to build and we'll give you an honest plan.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <a
+            href="/contact"
+            class="inline-block rounded-lg bg-white px-7 py-3.5 text-sm font-600 text-ink transition-colors hover:bg-white/90"
+          >
+            Start a project
+          </a>
+          <a
+            href="/services"
+            class="inline-block rounded-lg border border-white/20 px-7 py-3.5 text-sm font-600 text-white transition-colors hover:bg-white/10"
+          >
+            Explore services
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>
