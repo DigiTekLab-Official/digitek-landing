@@ -14,11 +14,22 @@ export default function ContactForm() {
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
   const handleSubmit = async () => {
+    // Basic validation
     if (!form.name || !form.email || !form.message) return;
-    // TODO: wire to your real endpoint (see README).
-    // await fetch('/api/contact', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(form) });
+    
     try {
-      setSent(true);
+      // Wires the form to your backend endpoint
+      const response = await fetch('/api/contact', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify(form) 
+      });
+
+      if (response.ok) {
+        setSent(true);
+      } else {
+        console.error("Failed to send message.");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -34,7 +45,7 @@ export default function ContactForm() {
     return (
       <div className="rounded-2xl border border-node-green/30 bg-tint-green p-8 text-center">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-node-green/15 text-2xl text-node-green">✓</div>
-        <h3 className="text-lg font-bold text-ink">Message ready to send.</h3>
+        <h3 className="text-lg font-bold text-ink">Message sent successfully.</h3>
         <p className="mt-2 text-sm text-muted">
           Thanks, {form.name.split(' ')[0] || 'there'}. We'll get back to you shortly.
           For anything urgent, reach us directly on WhatsApp.
