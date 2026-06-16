@@ -1,20 +1,6 @@
 // Cloudflare Pages Function — handles POST /api/contact
-//
-// Sends contact-form submissions straight to a verified Email Routing
-// destination (your Gmail) using the Cloudflare Email Workers binding.
-// This works with plain Email Routing — no separate Email Sending onboarding
-// is required, because the recipient is an already-verified destination.
-//
-// Requires (see wrangler.toml):
-//   - a `send_email` binding named EMAIL, restricted to destination_address
-//     = ameer.itoa@gmail.com (a verified Email Routing destination)
-//   - the `nodejs_compat` compatibility flag (for the mimetext dependency)
-//
-// `from` must be an address on a domain in your account with Email Routing
-// enabled (digiteklab.com).
-
-import { EmailMessage } from "cloudflare:email";
-import { createMimeMessage } from "mimetext";
+// Refactored to use Cloudflare's native MailChannels integration
+// Requires NO dashboard bindings, NO API keys, and NO extra dependencies.
 
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -22,7 +8,7 @@ const json = (data, status = 200) =>
     headers: { "content-type": "application/json" },
   });
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request }) {
   let body;
   try {
     body = await request.json();
@@ -46,33 +32,15 @@ export async function onRequestPost({ request, env }) {
     return json({ error: "Please enter a valid email address." }, 400);
   }
 
-  if (!env.EMAIL) {
-    console.error("Missing EMAIL binding — add a send_email binding named EMAIL.");
-    return json({ error: "Email is not configured on the server." }, 500);
-  }
-
-  const to = env.CONTACT_TO || "ameer.itoa@gmail.com";
-  const from = env.CONTACT_FROM || "noreply@digiteklab.com";
-
-  const text = [
-    `New project inquiry from ${name}`,
-    "",
-    `Name:    ${name}`,
-    `Email:   ${email}`,
-    `Company: ${company || "—"}`,
-    `Budget:  ${budget || "—"}`,
-    "",
-    "Message:",
-    message,
-  ].join("\n");
-
+  // HTML Escaping to prevent injection in the email body
   const esc = (s) =>
     String(s).replace(
       /[&<>"']/g,
       (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
     );
 
-  const html = `
+  // Clean HTML layout for the email you will receive
+  const htmlContent = `
     <h2 style="margin:0 0 12px;font:600 18px system-ui,sans-serif">New project inquiry</h2>
     <table cellpadding="0" cellspacing="0" style="font:14px/1.6 system-ui,sans-serif">
       <tr><td style="padding:2px 16px 2px 0"><strong>Name</strong></td><td>${esc(name)}</td></tr>
@@ -84,22 +52,49 @@ export async function onRequestPost({ request, env }) {
     <p style="font:14px/1.6 system-ui,sans-serif;white-space:pre-wrap;margin:0">${esc(message)}</p>
   `;
 
-  const msg = createMimeMessage();
-  msg.setSender({ name: "Digitek Lab — Contact Form", addr: from });
-  msg.setRecipient(to);
-  msg.setSubject(`New project inquiry from ${name}`);
-  msg.setHeader("Reply-To", email);
-  msg.addMessage({ contentType: "text/plain", data: text });
-  msg.addMessage({ contentType: "text/html", data: html });
-
   try {
-    await env.EMAIL.send(new EmailMessage(from, to, msg.asRaw()));
-    return json({ success: true });
+    // Send using MailChannels (Whitelisted for Cloudflare Pages automatically)
+    const sendEmail = await fetch('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: 'info@digiteklab.com', name: 'Digitek Lab' }],
+          },
+        ],
+        from: {
+          email: 'noreply@digiteklab.com',
+          name: 'Digitek Lab Website',
+        },
+        reply_to: {
+          email: email,
+          name: name,
+        },
+        subject: `New project inquiry from ${name}`,
+        content: [
+          {
+            type: 'text/html',
+            value: htmlContent,
+          },
+        ],
+      }),
+    });
+
+    if (sendEmail.ok) {
+      return json({ success: true });
+    } else {
+      const errorText = await sendEmail.text();
+      console.error("MailChannels Error:", errorText);
+      return json(
+        { error: "We couldn't send your message right now. Please email us directly." },
+        502
+      );
+    }
   } catch (err) {
-    console.error("Email send failed:", err?.code, err?.message);
-    return json(
-      { error: "We couldn't send your message. Please email us directly at info@digiteklab.com." },
-      502
-    );
+    console.error("Function Error:", err);
+    return json({ error: "Internal Server Error" }, 500);
   }
 }
