@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+// ⚠️ Replace with your Cloudflare Turnstile site key (Dashboard → Turnstile → your site → Site Key)
+const TURNSTILE_SITE_KEY = "0x4AAAAAADl11Vic-ulVvBua";
 
 const budgets = [
   'Under ₹1,00,000',
@@ -13,12 +16,42 @@ export default function ContactForm() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', email: '', company: '', budget: '', message: '', website: '' });
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = useRef(null);
+  const widgetIdRef = useRef(null);
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+
+  useEffect(() => {
+    let attempts = 0;
+    const tryRender = () => {
+      if (window.turnstile && turnstileRef.current && widgetIdRef.current === null) {
+        widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(''),
+          'error-callback': () => setTurnstileToken(''),
+        });
+      } else if (attempts++ < 40) {
+        setTimeout(tryRender, 100);
+      }
+    };
+    tryRender();
+    return () => {
+      if (widgetIdRef.current !== null && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message || sending) return;
     if (form.website) { setSent(true); return; }
+    if (!turnstileToken) {
+      setError('Please complete the verification.');
+      return;
+    }
     setSending(true);
     setError('');
     try {
@@ -35,6 +68,7 @@ export default function ContactForm() {
           budget: form.budget,
           message: form.message,
           botcheck: form.website,
+          'cf-turnstile-response': turnstileToken,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -45,6 +79,10 @@ export default function ContactForm() {
       }
     } catch (err) {
       setError(err.message || 'Network error. Please try again or email us directly.');
+      if (widgetIdRef.current !== null && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
+      setTurnstileToken('');
     } finally {
       setSending(false);
     }
@@ -112,6 +150,8 @@ export default function ContactForm() {
           <label htmlFor="contact-message" className={labelClass}>Project description</label>
           <textarea id="contact-message" name="message" required className={`${inputClass} min-h-[120px] resize-y`} value={form.message} onChange={update('message')} placeholder="What are you trying to build?" />
         </div>
+        {/* Turnstile widget — rendered explicitly via useEffect to avoid React island timing issues */}
+        <div ref={turnstileRef} />
         {error && (
           <p role="alert" className="rounded-lg border border-node-red/30 bg-tint-red px-4 py-3 text-sm text-node-red">
             {error}
