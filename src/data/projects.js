@@ -42,6 +42,7 @@ export const projects = [
     bullets: [
       'Comparison & buying-guide content',
       'SEO content architecture',
+      'Amazon affiliate integration',
       'Static, fast-loading pages',
     ],
     tags: ['Astro', 'SEO'],
@@ -50,15 +51,15 @@ export const projects = [
   {
     name: 'CalcToolsAI',
     url: 'https://calctoolsai.com',
-    category: 'Tools Platform',
+    category: 'AI Tools',
     type: 'web',
-    tagline: 'Online calculators & utility tools.',
+    tagline: 'AI-assisted calculators & utility tools.',
     bullets: [
       'Interactive calculator tools',
       'Programmatic landing pages',
       'React islands on a static shell',
     ],
-    tags: ['Astro', 'React'],
+    tags: ['Next.js', 'React', 'Tailwind'],
     featured: true,
   },
   {
@@ -66,11 +67,12 @@ export const projects = [
     url: 'https://freeapplytools.com',
     category: 'Education Tools',
     type: 'web',
-    tagline: 'Tools that help students with applications.',
+    tagline: 'Offline-first tools for Indian government exam applications.',
     bullets: [
-      'Student application utilities',
+      'Client-side only — files never leave the device',
+      'Photo & signature resizers for exam portals',
+      'Age limit & eligibility calculators',
       'Conversion-optimized flows',
-      'SEO content architecture',
     ],
     tags: ['Astro', 'React'],
     featured: true,
@@ -94,14 +96,32 @@ export const projects = [
     url: 'https://syntaxsnap.com',
     category: 'Developer Tools',
     type: 'web',
-    tagline: 'Performance-first developer utility platform.',
+    tagline: 'Privacy-first developer utilities — no data leaves your browser.',
     bullets: [
-      'Developer-focused tools',
+      'JSON, CSS, and data-format tools',
+      'AI-powered developer utilities',
+      'Client-side only, zero data collection',
       'Fast, lightweight UI',
-      'Static-first architecture',
     ],
     tags: ['Astro', 'React'],
     featured: false,
+  },
+  {
+    name: 'TechBuyRight',
+    url: 'https://techbuyright.com',
+    category: 'Content / Affiliate',
+    type: 'platform',
+    tagline: 'Tech reviews and buying guides for Indian consumers.',
+    bullets: [
+      'Product reviews & comparisons',
+      'Buying guides & recommendations',
+      'Amazon affiliate integration',
+      'Newsletter subscription',
+    ],
+    tags: ['Next.js', 'Tailwind', 'SEO'],
+    featured: false,
+    // Set featured: true once the site is live
+    comingSoon: true,
   },
   {
     name: 'Spendlumen',
@@ -111,8 +131,8 @@ export const projects = [
     tagline: 'Procurement intelligence consultancy brand & site.',
     bullets: [
       'Brand & marketing site',
-      'Service-ladder presentation',
-      'Lead capture',
+      'Four-tier service-ladder presentation',
+      'Lead capture & contact flows',
     ],
     tags: ['Astro', 'Cloudflare'],
     featured: false,
@@ -202,7 +222,7 @@ export const services = [
 // Real, substantiable numbers only.
 export const stats = [
   { value: '20+', label: 'Years building technology', note: 'since 2002' },
-  { value: '10+', label: 'Live products built & operated', note: 'in-house' },
+  { value: '11+', label: 'Live products built & operated', note: 'in-house' },
   { value: 'Live', label: 'Online payments in production', note: 'Razorpay' },
   { value: 'India & UAE', label: 'Markets we serve', note: 'based in Tamil Nadu' },
 ];
@@ -283,7 +303,7 @@ export const faqs = [
   },
   {
     q: 'Have you actually shipped products with live payments?',
-    a: 'Yes. We build and operate 10+ live products in-house, and we run live online payments in production through Razorpay on ApplySure. We only describe capabilities we can demonstrate.',
+    a: 'Yes. We build and operate 11+ live products in-house, and we run live online payments in production through Razorpay on ApplySure. We only describe capabilities we can demonstrate.',
   },
   {
     q: 'Which markets and industries do you work with?',
