@@ -3,6 +3,13 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Reveal from "../components/Reveal.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+
+// Normalize across dev ("/contact") and static build ("/contact.html") output.
+const normalizedPath = Astro.url.pathname
+  .replace(/\.html$/, "")
+  .replace(/\/+$/, "");
+const showWhatsApp = normalizedPath !== "/contact";
 
 const {
   title = "Digitek Lab — Software studio for web, mobile, e-commerce & AI",
@@ -50,5 +57,6 @@ const nav = [
 
     <Footer />
     <Reveal />
+    {showWhatsApp && <WhatsAppButton />}
   </body>
 </html>
