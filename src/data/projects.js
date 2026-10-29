@@ -138,6 +138,23 @@ export const projects = [
     featured: false,
   },
   {
+    name: 'RankMock',
+    url: 'https://rankmock.com',
+    category: 'Education Tools',
+    type: 'platform',
+    tagline: 'Tamil-medium TNPSC Group 4 exam guides, with free online mock tests on the way.',
+    bullets: [
+      'Tamil-language TNPSC Group 4 guides: eligibility, exam pattern, syllabus',
+      'OMR rules explained, with references to the official notification',
+      'Free online mock tests in the official 200-question format (in development)',
+      'Transparent mock-test ranking among peers',
+    ],
+    tags: ['TNPSC', 'Tamil', 'Mock Tests'],
+    featured: false,
+    // Set featured: true once the mock tests are live
+    comingSoon: true,
+  },
+  {
     name: 'HelixVanguard',
     url: 'https://helixvanguard.com',
     category: 'Business Site',
